@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import axios from 'axios'
+import Dropzone from 'react-dropzone'
 
 class Main extends Component {
   state = {
@@ -13,8 +14,8 @@ class Main extends Component {
 
     let data = new FormData()
 
-    // console.log('this.uploadInput', this.uploadInput.files[0])
-    // console.log('this.filename', this.filename.value)
+    console.log('handleUploadImage this.uploadInput => ', this.uploadInput.files[0])
+    console.log('handleUploadImage this.filename => ', this.filename.value)
     data.append('file', this.uploadInput.files[0])
     data.append('filename', this.filename.value)
 
@@ -35,22 +36,43 @@ class Main extends Component {
       })
     } 
   }
+  
+  onDrop (acceptedFiles, rejectedFiles ){
+    const data = new FormData()
+
+    data.append('file', acceptedFiles[0])
+    data.append('filename', acceptedFiles[0].name)
+
+    this.uploadFile(data)
+  }
 
   render() {
     return (
-      <form onSubmit={this.handleUploadImage}>
-        <div>
-          <input ref={ref => { this.uploadInput = ref}} type='file' />
+      <div>
+        <form onSubmit={this.handleUploadImage}>
+          <div>
+            <input ref={ref => { this.uploadInput = ref}} type='file' />
+          </div>
+          <div>
+            <input ref={ref => { this.filename = ref }} type='text' placeholder='Enter the desired name of file' />
+          </div>
+          <div style={{ width: '100%' }}>
+            <Dropzone
+              style={{ background: 'gray', margin: '1em', width: '400px', border: '1px solid blue', padding: '1em', height: '100px' }}
+              onDrop={files => this.onDrop(files)}
+            >
+              <div>Try dropping some files here, or click to select files to upload.</div>
+            </Dropzone>
+          </div>
+          <br />
+          <div>
+            <button>Upload</button>
+          </div>
+        </form>
+        <div style={{width: '100%', border: '1px solid black', textAlign: 'center'}}>
+          <img width='500px' src={this.state.imageURL} alt="img" />
         </div>
-        <div>
-          <input ref={ref => { this.filename = ref }} type='text' placeholder='Enter the desired name of file' />
-        </div>
-        <br />
-        <div>
-          <button>Upload</button>
-        </div>
-        <img src={this.state.imageURL} alt="img" />
-      </form>
+      </div>
     )
   }
 }
