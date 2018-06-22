@@ -14,8 +14,6 @@ class Main extends Component {
 
     let data = new FormData()
 
-    console.log('handleUploadImage this.uploadInput => ', this.uploadInput.files[0])
-    console.log('handleUploadImage this.filename => ', this.filename.value)
     data.append('file', this.uploadInput.files[0])
     data.append('filename', this.filename.value)
 
